@@ -1,9 +1,12 @@
+import { lerp2, lerp3 } from './lerp.js';
 import anime from './anime.es.js';
 
 var WhyText = $("#why-text")
 var UserText = $("#user-text")
 var UserInput = $("#user-input")
 var UserHistory = $("#user-history")
+var ConfidenceBar = $("#confidence-bar")
+var Confidence = $("#confidence")
 
 var isUserPrompt = true;
 
@@ -33,14 +36,7 @@ function userPrompt() {
 
             anime({
                 duration: 300,
-                targets: '#user-input',
-                opacity: 1,
-                easing: 'easeInOutSine'
-            });
-
-            anime({
-                duration: 300,
-                targets: '#user-history',
+                targets: '#user-text',
                 opacity: 1,
                 easing: 'easeInOutSine'
             });
@@ -88,14 +84,7 @@ function tellUser(text, textSize, separate) {
 
     anime({
         duration: 300,
-        targets: '#user-history',
-        opacity: 0,
-        easing: 'easeInOutSine'
-    })
-    
-    anime({
-        duration: 300,
-        targets: '#user-input',
+        targets: '#user-text',
         opacity: 0,
         easing: 'easeInOutSine',
         complete: function() {
@@ -122,6 +111,52 @@ function tellUser(text, textSize, separate) {
     });
 }
 
+var Red = [255, 60, 60];
+var Orange = [220, 154, 0];
+var Green = [0, 207, 0];
+
+let goodConfidence = 10;
+function getConfidenceColor(confidence) {
+    return [    lerp3(Red[0], Orange[0], Green[0], confidence/goodConfidence, 0.5),
+                lerp3(Red[1], Orange[1], Green[1], confidence/goodConfidence, 0.5),
+                lerp3(Red[2], Orange[2], Green[2], confidence/goodConfidence, 0.5)  ]
+}
+
+function updateConfidence(confidence) {
+    let lerpedColor = getConfidenceColor(confidence)
+    
+    anime({
+        duration: 200,
+        targets: '#confidence-bar',
+        easing: 'easeInOutSine',
+        backgroundColor: `rgb(${lerpedColor[0]}, ${lerpedColor[1]}, ${lerpedColor[2]})`
+    })
+
+    Confidence.html(confidence.toFixed(3).toString())
+}
+
+function calcConfidence(statements) {
+    let total = 0;
+
+    let depth = 1
+    for (let statement of statements) {
+        let avgWordLength = 0
+        let words = statement.split(" ")
+        for (let word of words) {
+            avgWordLength += word.length;
+        }
+        avgWordLength = avgWordLength / words.length;
+
+        total += (statement.split(" ").length * avgWordLength * depth) / 4000
+        depth += 1;
+    }
+
+    return total.clamp(0,Infinity);
+}
+
+var history = [];
+var previous;
+
 var idkMessages = [
     "idk",
     "idrk",
@@ -137,11 +172,14 @@ var idkMessages = [
     "ask god"
 ]
 
-var history = [];
-var previous;
 $(document).keypress(function(e) {
     if(e.target == UserInput[0] && e.which == 13) {
         var input = UserInput.val()
+
+        if (input.length < 3) {
+            return false;
+        }
+
         var lowered = input.toLowerCase();
         if (history.length > 0 && lowered == history[history.length - 1].toLowerCase()) {
             return false;
@@ -171,10 +209,16 @@ $(document).keypress(function(e) {
                 UserHistory.prepend(previous);
 
                 userPrompt();
+
+                let newConfidence = calcConfidence(history);
+                updateConfidence(newConfidence)
             }, 2000);
         } else {
+            let confidence = calcConfidence(history);
+
             tellUser("You don't know anything...", "90px", true);
             tellUser(`"${history.join(" → ")}"`, "45px", false)
+            tellUser(`Confidence/Score: ${confidence.toFixed(3)}`, "40px", true)
             history = [];
             UserHistory.html("");
         }
