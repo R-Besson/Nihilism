@@ -16,7 +16,7 @@ This simple tool:<br>
 
 4. The longer someone can continue without doing these 2 things, the more confident and stable they are in their opinions & psychology.
 
-- **Ervtyhing we believe to know (knowledge and beliefs in epistemology), are founded on other things we believe to know. Unraveling this chain leads to a lack of substance.**
+- **Everything we say (knowledge and beliefs in epistemology), are founded on other things say. Ultimately what you say is just beliefs.**
 
 - **The brightest, most confident person, would be able to respond to an infinite amount of why's.**
 
