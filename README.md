@@ -16,7 +16,7 @@ This simple tool:<br>
 
 4. The longer someone can continue without doing these 2 things, the more confident and stable they are in their opinions & psychology.
 
-- **We have never known anything, we don't know anything, we will never know anything.**
+- **Ervtyhing we believe to know (knowledge and beliefs in epistemology), are founded on other things we believe to know. Unraveling this chain leads to a lack of substance.**
 
 - **The brightest, most confident person, would be able to respond to an infinite amount of why's.**
 
@@ -26,6 +26,3 @@ This simple tool:<br>
 
 ### On Gravity
 "Gravity exists → Because we have observed it → Because we are observant creatures by nature → Because we rely on a pair of eyes to make decisions → Because eyes are the best thing we have to be aware of our surroundings → That's just how the monad wanted it to be → I don't know"
-
-### On Health
-A patient cured is a customer lost → Because they pay you → To get treated for their wounds → To maintain a stable healthy body → To not die → I dont know
